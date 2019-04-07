@@ -1,7 +1,7 @@
 from openpyxl import load_workbook, Workbook
 
 
-class Divider(self):
+class Divider:
 	def __init__(self):
 		self.rb = Workbook()
 		
@@ -9,15 +9,15 @@ class Divider(self):
 		return 
 	
 	def join(self, xname):
-	print("从"+xname+"中读取数据")
-		wb = load_workbook("%s.xlsx"%xname)
+		print("从"+xname+"中读取数据")
+		wb = load_workbook("%s.xlsx" % xname)
 		sheets = wb.get_sheet_names()
 		for sheet in sheets:
-			sheets["A"]
-		return wb
+			for row in wb[sheet]["A"]:
+				self.rb.active.append([row.value, ])
+		return self.rb
 	
-	def divide(self, wb, d_num, f_name):
-		rb = wb
+	def divide(self, rb, d_num, f_name):
 		sheet = rb.active
 		sheet.title = "总表"
 		a = list(sheet["A"])
@@ -57,4 +57,10 @@ class Divider(self):
 				else:
 					pass
 				# print(a)
-		rb.save(f_name)
+		rb.save(f_name+".xlsx")
+
+
+if __name__ == "__main__":
+	d = Divider()
+	wb = d.join("数据6_分表2")
+	d.divide(wb, 2000, "数据6")
