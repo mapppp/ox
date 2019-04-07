@@ -4,21 +4,18 @@ from openpyxl import load_workbook, Workbook
 class Divider:
 	def __init__(self):
 		self.rb = Workbook()
-		
-	def get_xlsx(self, xname):
-		return 
 	
 	def join(self, xname):
 		print("从"+xname+"中读取数据")
 		wb = load_workbook("%s.xlsx" % xname)
-		sheets = wb.get_sheet_names()
+		sheets = wb.sheetnames
 		for sheet in sheets:
 			for row in wb[sheet]["A"]:
 				self.rb.active.append([row.value, ])
 		return self.rb
-	
-	def divide(self, rb, d_num, f_name):
-		sheet = rb.active
+
+	def divide(self, d_num, f_name):
+		sheet = self.rb.active
 		sheet.title = "总表"
 		a = list(sheet["A"])
 		end_num = sheet.max_row % d_num
@@ -34,8 +31,8 @@ class Divider:
 				print("提取数据")
 				group = a[0:d_num]
 				print("创建新表"+str(xname))
-				rb.create_sheet("分表" + str(xname))
-				f_s = rb["分表" + str(xname)]
+				self.rb.create_sheet("分表" + str(xname))
+				f_s = self.rb["分表" + str(xname)]
 				print("删除总表中提取出来的数据")
 				for i in group:
 					a.remove(i)
@@ -47,8 +44,8 @@ class Divider:
 			else:
 				if len(a) != 0:
 					print("创建新表"+str(xname))
-					rb.create_sheet("分表" + str(xname))
-					f_s = rb["分表" + str(xname)]
+					self.rb.create_sheet("分表" + str(xname))
+					f_s = self.rb["分表" + str(xname)]
 					print("将数据添加到分表中")
 					c_n = 1
 					for i in a:
@@ -57,10 +54,10 @@ class Divider:
 				else:
 					pass
 				# print(a)
-		rb.save(f_name+".xlsx")
+		self.rb.save(f_name+".xlsx")
 
 
 if __name__ == "__main__":
 	d = Divider()
-	wb = d.join("数据6_分表2")
-	d.divide(wb, 2000, "数据6")
+	d.join("数据5")
+	d.divide(2000, "数据6")
